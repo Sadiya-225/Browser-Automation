@@ -145,7 +145,7 @@ export function LogsPanel({
   if (runs.length === 0) {
     return (
       <div className="flex size-full items-center justify-center text-sm text-muted-foreground">
-        No runs yet
+        No Runs Yet
       </div>
     )
   }

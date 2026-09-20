@@ -97,17 +97,17 @@ export function SessionReplay({ sessionId }: { sessionId: string }) {
       {status === "loading" && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-xs text-muted-foreground">
           <Loader2 className="size-4 animate-spin" />
-          <span>Preparing recording…</span>
+          <span>Preparing Recording…</span>
         </div>
       )}
       {status === "error" && (
         <div className="absolute inset-0 flex items-center justify-center p-3 text-center text-xs text-muted-foreground">
-          This recording couldn&apos;t be loaded.
+          This Recording Couldn&apos;t Be Loaded.
         </div>
       )}
       {status === "unsupported" && (
         <div className="absolute inset-0 flex items-center justify-center p-3 text-center text-xs text-muted-foreground">
-          This browser can&apos;t play the recording.
+          This Browser Can&apos;t Play the Recording.
         </div>
       )}
     </div>

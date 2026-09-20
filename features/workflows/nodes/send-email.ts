@@ -16,10 +16,8 @@ export async function sendEmail({
     html: body,
   })
 
-  // The Resend SDK returns { data, error } and does not throw on API errors.
-  // Throw so the run marks this step failed instead of looking successful.
   if (error || !data) {
-    throw new Error(error?.message ?? "Resend returned no email id")
+    throw new Error(error?.message ?? "Resend Returned No Email ID")
   }
 
   return { id: data.id }
