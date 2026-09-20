@@ -4,7 +4,9 @@ import sentryEsbuildPlugin from "@sentry/esbuild-plugin";
 
 export default defineConfig({
   project: "proj_gtpehfybtolvyjfpspis",
-  runtime: "node",
+  // Plain "node" resolves to Node 21.7.3, which Trigger.dev is dropping
+  // support for (deployments fail from Oct 5) — pin the LTS explicitly.
+  runtime: "node-22",
   logLevel: "log",
   // The max compute seconds a task is allowed to run. If the task run exceeds this duration, it will be stopped.
   // You can override this on an individual task.
