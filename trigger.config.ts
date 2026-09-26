@@ -4,9 +4,7 @@ import sentryEsbuildPlugin from "@sentry/esbuild-plugin";
 
 export default defineConfig({
   project: "proj_gtpehfybtolvyjfpspis",
-  // Plain "node" resolves to Node 21.7.3, which Trigger.dev is dropping
-  // support for (deployments fail from Oct 5) — pin the runtime explicitly.
-  runtime: "node-24",
+  runtime: "node",
   logLevel: "log",
   // The max compute seconds a task is allowed to run. If the task run exceeds this duration, it will be stopped.
   // You can override this on an individual task.
@@ -34,17 +32,6 @@ export default defineConfig({
         }),
         { placement: "last", target: "deploy" }
       ),
-      {
-        name: "externalize-stagehand",
-        // Stagehand's shutdown supervisor (crash-cleanup for local Chrome /
-        // Browserbase sessions) locates its own sibling cli.js by inspecting
-        // its currently-executing file's path. Bundling the package into the
-        // single esbuild task output moves that path, so the lookup fails
-        // even though cli.js exists on disk — surfacing as "Shutdown
-        // supervisor unavailable" at runtime. Keeping it external leaves it a
-        // real node_modules import, so the lookup resolves correctly.
-        externalsForTarget: () => ["@browserbasehq/stagehand"],
-      },
     ],
   },
 });

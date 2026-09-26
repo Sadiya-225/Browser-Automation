@@ -399,28 +399,8 @@ function RunButton({ workflowId }: { workflowId: string }) {
           return
         }
 
-        // Opened synchronously, inside the click, so the browser doesn't
-        // block it as an unrequested popup. It starts on our own live-view
-        // page, which shows the run's progress immediately (the Browserbase
-        // session doesn't exist yet) and switches to the session's own live
-        // view once it opens — see features/workflows/components/live-view.tsx.
-        const tab = window.open("", "_blank")
-        if (!tab) {
-          toast.error(
-            "Your browser blocked the live view tab — allow popups for this site."
-          )
-        }
-
         startTransition(async () => {
-          try {
-            const handle = await runWorkflowAction({ id: workflowId, graph })
-            if (tab) tab.location.href = `/workflows/${workflowId}/live/${handle.id}`
-          } catch (error) {
-            tab?.close()
-            toast.error(
-              error instanceof Error ? error.message : "Couldn't start the run."
-            )
-          }
+          await runWorkflowAction({ id: workflowId, graph })
         })
       }}
     >

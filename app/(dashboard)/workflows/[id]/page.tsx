@@ -50,7 +50,7 @@ export default async function Page({
   return (
     <Room roomId={id}>
       <ReactFlowProvider>
-        <WorkflowRunsProvider workflowId={id} accessToken={runsToken} resyncOnVisibility>
+        <WorkflowRunsProvider workflowId={id} accessToken={runsToken}>
           <WorkflowShell workflowId={id} />
         </WorkflowRunsProvider>
       </ReactFlowProvider>

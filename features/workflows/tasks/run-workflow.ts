@@ -97,27 +97,7 @@ export const runWorkflowTask = task({
       })
       await stagehand.init()
       browserbaseSessionId = stagehand.browserbaseSessionID
-      // Published immediately (not left for the next steps flush) so a tab
-      // opened when the run was triggered can be routed to the live view the
-      // moment the session exists, rather than waiting on the first step.
-      // env is always "BROWSERBASE" here, so the id is always set in practice.
-      if (browserbaseSessionId) {
-        metadata.set("browserbaseSessionId", browserbaseSessionId)
-        await metadata.flush()
-      }
       return stagehand
-    }
-
-    // Flags the session as ending before actually closing it, so a live-view
-    // tab can close itself right away instead of waiting for this run to
-    // report as finished — stagehand.close() is a network round-trip to
-    // Browserbase, during which the live view would otherwise sit on
-    // Browserbase's own "session disconnected" screen.
-    const closeStagehand = async () => {
-      if (!stagehand) return
-      metadata.set("browserbaseSessionEnded", true)
-      await metadata.flush()
-      await stagehand.close()
     }
 
     // Each node's result, keyed by its id, so later nodes can pull from it.
@@ -172,7 +152,7 @@ export const runWorkflowTask = task({
         step.error = error instanceof Error ? error.message : String(error)
         publishSteps()
         await metadata.flush()
-        await closeStagehand()
+        await stagehand?.close()
         throw error
       }
 
@@ -181,7 +161,7 @@ export const runWorkflowTask = task({
       publishSteps()
     }
 
-    await closeStagehand()
+    await stagehand?.close()
 
     return { steps, browserbaseSessionId }
   },
